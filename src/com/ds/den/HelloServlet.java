@@ -12,9 +12,9 @@ public class HelloServlet extends HttpServlet {
                     "</html>";
 
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        this.process(request, response);
-    }
+    //protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //    this.process(request, response);
+    //}
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
