@@ -15,26 +15,29 @@ public class HelloServlet extends HttpServlet {
     // config supported file types
     final private String[] supportTypes = {"png", "jpeg", "gif"};
 
+
+    private String resultMessage;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html;charset=UTF-8");
 
         final Part filePart = request.getPart("file");
         final String fileName = getFileName(filePart);
-        final PrintWriter writer = response.getWriter();
+        //final PrintWriter writer = response.getWriter();
+
         if (filePart == null) {
-            writer.write("sorry, but your image didn't upload");
+            resultMessage = "sorry, but your image didn't upload";
+            goToView(request, response);
             return;
         }
         if (!checkFileType(filePart)) {
-            writer.write("sorry, you can't upload file with this type");
+            resultMessage = "sorry, you can't upload file with this filetype";
+            goToView(request, response);
             return;
         }
 
-        uploadFile(filePart, fileName);
-
-        if (writer != null) {
-            writer.close();
-        }
+       resultMessage =  uploadFile(filePart, fileName);
+       goToView(request, response);
     }
 
     private String uploadFile(Part filePart, String fileName) throws IOException, ServletException {
@@ -98,4 +101,11 @@ public class HelloServlet extends HttpServlet {
         return false;
     }
 
+
+    private void goToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("resultMessage", resultMessage);
+        RequestDispatcher rd = getServletContext()
+                .getRequestDispatcher("/index.jsp");
+        rd.forward(request, response);
+    }
 }

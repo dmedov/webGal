@@ -8,8 +8,16 @@
         <servlet-name>helloServlet</servlet-name>
         <servlet-class>com.ds.den.HelloServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>com.ds.den.DownloadServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>helloServlet</servlet-name>
         <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download</url-pattern>
     </servlet-mapping>
 </web-app>
