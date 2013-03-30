@@ -14,7 +14,7 @@
 
 ${resultMessage}
 
-<form action="/hello" method="post" enctype="multipart/form-data">
+<form action="/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="file" id="file"><br>
     <input type="submit" name="submit" value="Submit">
 </form>

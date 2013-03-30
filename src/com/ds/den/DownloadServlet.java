@@ -21,7 +21,7 @@ public class DownloadServlet extends HttpServlet  {
         response.setContentType(getContentType(fileName));
 
         // download to browser option
-        if (attach.equals("true")) {
+        if (attach != null && attach.equals("true")) {
             response.setHeader("Content-disposition","attachment; filename=" + fileName);
         }
 
