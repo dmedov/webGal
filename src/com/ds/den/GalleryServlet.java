@@ -29,18 +29,13 @@ public class GalleryServlet extends HttpServlet {
             fileNames.add(files[i].getName());
         }
 
-
         //throw new ServletException(fileNames.get(0));
         goToView(request, response);
     }
 
 
     private void goToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("testVar", "hahaha");
-
         request.setAttribute("fileNames", fileNames);
-        this.getServletContext().setAttribute("testVar2", "BIG!");
-
         RequestDispatcher rd = getServletContext()
                 .getRequestDispatcher("/gallery.jsp");
         rd.forward(request, response);
