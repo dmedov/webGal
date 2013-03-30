@@ -19,7 +19,7 @@ ${resultMessage}
     <input type="submit" name="submit" value="Submit">
 </form>
 
-<img src="/download?name=f.jpg">
+<img src="/download?name=example.jpg">
 
 </body>
 </html>

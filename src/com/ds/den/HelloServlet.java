@@ -10,8 +10,6 @@ import javax.servlet.http.*;
 @MultipartConfig(maxFileSize = 10485760L) // 10MB.
 public class HelloServlet extends HttpServlet {
 
-    // config upload folder
-    final private String  path =  "C:\\uploads\\";
     // config supported file types
     final private String[] supportTypes = {"png", "jpeg", "gif"};
 
@@ -20,6 +18,8 @@ public class HelloServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html;charset=UTF-8");
+
+
 
         final Part filePart = request.getPart("file");
         final String fileName = getFileName(filePart);
@@ -44,7 +44,12 @@ public class HelloServlet extends HttpServlet {
         OutputStream out = null;
         InputStream filecontent = null;
         try {
-            out = new FileOutputStream(new File(path + fileName));
+            String uploadPath =  getServletConfig().getInitParameter("uploadPath");
+            if (uploadPath == null) {
+                throw new ServletException("'uploadPath' is not configured.");
+            }
+
+            out = new FileOutputStream(new File(uploadPath + fileName));
             filecontent = filePart.getInputStream();
 
             int read = 0;

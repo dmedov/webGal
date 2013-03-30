@@ -22,7 +22,7 @@ public class DownloadServlet extends HttpServlet  {
         // Assume file name is retrieved from database
         // For example D:\\file\\test.pdf
 
-        File file =new File("C:\\uploads\\" + fileName);
+        File file = new File("C:\\uploads\\" + fileName);
 
         // send file
         OutputStream out = response.getOutputStream();
@@ -35,4 +35,5 @@ public class DownloadServlet extends HttpServlet  {
         in.close();
         out.flush();
     }
+
 }
