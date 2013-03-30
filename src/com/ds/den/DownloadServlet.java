@@ -21,8 +21,11 @@ public class DownloadServlet extends HttpServlet  {
 
         // Assume file name is retrieved from database
         // For example D:\\file\\test.pdf
-
-        File file = new File("C:\\uploads\\" + fileName);
+        String downloadPath =  getServletConfig().getInitParameter("downloadPath");
+        if (downloadPath == null) {
+            throw new ServletException("'downloadPath' is not configured.");
+        }
+        File file = new File(downloadPath + fileName);
 
         // send file
         OutputStream out = response.getOutputStream();
