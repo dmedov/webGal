@@ -44,7 +44,7 @@ public class UploadServlet extends HttpServlet {
         OutputStream out = null;
         InputStream filecontent = null;
         try {
-            String uploadPath =  getServletConfig().getInitParameter("uploadPath");
+            String uploadPath =  this.getServletContext().getInitParameter("uploadPath");
             if (uploadPath == null) {
                 throw new ServletException("'uploadPath' is not configured.");
             }
@@ -59,6 +59,7 @@ public class UploadServlet extends HttpServlet {
             while ((read = filecontent.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
+
             return "File " + fileName + " uploaded";
             //LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
             //        new Object[]{fileName, path});

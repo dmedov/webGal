@@ -1,25 +1,12 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user8
-  Date: 3/28/13
-  Time: 4:52 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title></title>
 </head>
 <body>
-
 ${resultMessage}
 
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" id="file"><br>
-    <input type="submit" name="submit" value="Submit">
-</form>
-
-<img src="/download?name=example.jpg">
+<a href="/gallery">goto gallery</a>
 
 </body>
 </html>

@@ -17,7 +17,6 @@ public class DownloadServlet extends HttpServlet  {
         String fileName = request.getParameter("name");
         String attach = request.getParameter("attach");
 
-
         response.setContentType(getContentType(fileName));
 
         // download to browser option
@@ -25,11 +24,11 @@ public class DownloadServlet extends HttpServlet  {
             response.setHeader("Content-disposition","attachment; filename=" + fileName);
         }
 
-        String downloadPath =  getServletConfig().getInitParameter("downloadPath");
-        if (downloadPath == null) {
-            throw new ServletException("'downloadPath' is not configured.");
+        String uploadPath =  this.getServletContext().getInitParameter("uploadPath");
+        if (uploadPath == null) {
+            throw new ServletException("'uploadPath' is not configured.");
         }
-        File file = new File(downloadPath + fileName);
+        File file = new File(uploadPath + fileName);
 
         // send file
         OutputStream out = response.getOutputStream();
@@ -41,8 +40,8 @@ public class DownloadServlet extends HttpServlet  {
         }
         in.close();
         out.flush();
-    }
 
+    }
 
     private String getContentType(String fileName) throws ServletException {
         final String[] correctSuffixs = {"png", "jpg", "gif"};
