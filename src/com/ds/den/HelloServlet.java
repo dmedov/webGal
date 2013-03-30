@@ -11,6 +11,8 @@ public class HelloServlet extends HttpServlet {
 
     // config upload folder
     final private String  path =  "C:\\uploads\\";
+    // config supported file types
+    final private String[] supportTypes = {"png", "jpeg", "gif"};
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         processRequest(request, response);
@@ -29,6 +31,10 @@ public class HelloServlet extends HttpServlet {
         final PrintWriter writer = response.getWriter();
         if (filePart == null) {
             writer.write("sorry, but your image didn't upload");
+            return;
+        }
+        if (!checkFileType(filePart)) {
+            writer.write("sorry, you can't upload file with this type");
             return;
         }
 
@@ -77,5 +83,20 @@ public class HelloServlet extends HttpServlet {
             }
         }
         return null;
+    }
+
+
+    // content-type for image file looks like
+    // Content-Type: image/jpg
+    private boolean checkFileType(final Part part) {
+        String[] types = part.getHeader("content-type").split("/");
+        if (types[0].equals("image")) {
+            for (String goodType : supportTypes) {
+                if (goodType.equals(types[1])) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
