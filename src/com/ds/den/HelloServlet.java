@@ -1,6 +1,7 @@
 package com.ds.den;
 
 import java.io.*;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.*;
@@ -15,19 +16,10 @@ public class HelloServlet extends HttpServlet {
     final private String[] supportTypes = {"png", "jpeg", "gif"};
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        processRequest(request, response);
-    }
-
-    protected void processRequest(HttpServletRequest request,
-                                  HttpServletResponse response)
-            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         final Part filePart = request.getPart("file");
         final String fileName = getFileName(filePart);
-        OutputStream out = null;
-        InputStream filecontent = null;
-
         final PrintWriter writer = response.getWriter();
         if (filePart == null) {
             writer.write("sorry, but your image didn't upload");
@@ -38,6 +30,16 @@ public class HelloServlet extends HttpServlet {
             return;
         }
 
+        uploadFile(filePart, fileName);
+
+        if (writer != null) {
+            writer.close();
+        }
+    }
+
+    private String uploadFile(Part filePart, String fileName) throws IOException, ServletException {
+        OutputStream out = null;
+        InputStream filecontent = null;
         try {
             out = new FileOutputStream(new File(path + fileName));
             filecontent = filePart.getInputStream();
@@ -49,14 +51,14 @@ public class HelloServlet extends HttpServlet {
             while ((read = filecontent.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
-            writer.println("New file " + fileName + " created at " + path);
+            return "File " + fileName + " uploaded";
             //LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
             //        new Object[]{fileName, path});
         } catch (FileNotFoundException fne) {
-            writer.println("You either did not specify a file to upload or are "
+            return "You either did not specify a file to upload or are "
                     + "trying to upload a file to a protected or nonexistent "
-                    + "location.");
-            writer.println("<br/> ERROR: " + fne.getMessage());
+                    + "location."
+                    + "<br/> ERROR: " + fne.getMessage();
 
             //LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
             //        new Object[]{fne.getMessage()});
@@ -66,9 +68,6 @@ public class HelloServlet extends HttpServlet {
             }
             if (filecontent != null) {
                 filecontent.close();
-            }
-            if (writer != null) {
-                writer.close();
             }
         }
     }
@@ -85,10 +84,9 @@ public class HelloServlet extends HttpServlet {
         return null;
     }
 
-
-    // content-type for image file looks like
-    // Content-Type: image/jpg
     private boolean checkFileType(final Part part) {
+        // content-type for image file looks like
+        // Content-Type: image/jpg
         String[] types = part.getHeader("content-type").split("/");
         if (types[0].equals("image")) {
             for (String goodType : supportTypes) {
@@ -99,4 +97,5 @@ public class HelloServlet extends HttpServlet {
         }
         return false;
     }
+
 }
