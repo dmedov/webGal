@@ -11,16 +11,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class DownloadServlet extends HttpServlet  {
+
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String fileName = request.getParameter("name");
+        String attach = request.getParameter("attach");
 
-        response.setContentType("image/jpeg");
 
-        // Make sure to show the download dialog
-        //response.setHeader("Content-disposition","attachment; filename=yourcustomfilename.pdf");
+        response.setContentType(getContentType(fileName));
 
-        // Assume file name is retrieved from database
-        // For example D:\\file\\test.pdf
+        // download to browser option
+        if (attach.equals("true")) {
+            response.setHeader("Content-disposition","attachment; filename=" + fileName);
+        }
+
         String downloadPath =  getServletConfig().getInitParameter("downloadPath");
         if (downloadPath == null) {
             throw new ServletException("'downloadPath' is not configured.");
@@ -39,4 +43,16 @@ public class DownloadServlet extends HttpServlet  {
         out.flush();
     }
 
+
+    private String getContentType(String fileName) throws ServletException {
+        final String[] correctSuffixs = {"png", "jpg", "gif"};
+        if (fileName.endsWith(".jpg")) {
+            return "image/jpeg";
+        }
+        for (String correctSuffix : correctSuffixs)
+            if (fileName.endsWith("." + correctSuffix)) {
+                return "image/" + correctSuffix;
+            }
+        throw new ServletException("file with this filetype cant be downloaded.");
+    }
 }
