@@ -8,7 +8,7 @@ import javax.servlet.http.*;
 
 
 @MultipartConfig(maxFileSize = 10485760L) // 10MB.
-public class HelloServlet extends HttpServlet {
+public class UploadServlet extends HttpServlet {
 
     // config supported file types
     final private String[] supportTypes = {"png", "jpeg", "gif"};
