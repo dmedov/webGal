@@ -12,17 +12,17 @@
 
     <servlet>
         <servlet-name>uploadServlet</servlet-name>
-        <servlet-class>com.ds.den.UploadServlet</servlet-class>
+        <servlet-class>com.ds.controllers.UploadServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>downloadServlet</servlet-name>
-        <servlet-class>com.ds.den.DownloadServlet</servlet-class>
+        <servlet-class>com.ds.controllers.DownloadServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>galleryServlet</servlet-name>
-        <servlet-class>com.ds.den.GalleryServlet</servlet-class>
+        <servlet-class>com.ds.controllers.GalleryServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
