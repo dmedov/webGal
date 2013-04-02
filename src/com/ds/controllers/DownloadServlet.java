@@ -21,38 +21,23 @@ public class DownloadServlet extends HttpServlet  {
         if (uploadPath == null) {
             throw new ServletException("'uploadPath' is not configured.");
         }
-        // prepare model
-        imageModel = ImageModel.getInstance();
-        ImageModel.setPath(uploadPath);
+        imageModel = ImageModel.getInstance(uploadPath);
     }
 
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String fileName = request.getParameter("name");
+        String fileId = request.getParameter("id");
         String attach = request.getParameter("attach");
 
-        response.setContentType(getContentType(fileName));
+        if (fileId == null || !imageModel.validId(fileId)) {
+            throw new ServletException("invalid id");
+        }
+
+        response.setContentType(imageModel.getMimeType(fileId));
+        imageModel.downloadFile(fileId, response.getOutputStream());
 
         // download to browser option
         if (attach != null && attach.equals("true")) {
-            response.setHeader("Content-disposition","attachment; filename=" + fileName);
+            response.setHeader("Content-disposition","attachment; filename=" + imageModel.getFullName(fileId));
         }
-
-        OutputStream out = response.getOutputStream();
-        imageModel.uploadFile(out);
-        out.flush();
-
-    }
-
-    private String getContentType(String fileName) throws ServletException {
-        final String[] correctSuffixs = {"png", "jpg", "gif"};
-        if (fileName.endsWith(".jpg")) {
-            return "image/jpeg";
-        }
-        for (String correctSuffix : correctSuffixs)
-            if (fileName.endsWith("." + correctSuffix)) {
-                return "image/" + correctSuffix;
-            }
-        throw new ServletException("file with this filetype cant be downloaded.");
     }
 }
