@@ -15,13 +15,15 @@ ${resultMessage}
 
 <%
     // show images with links
-    ArrayList<String> imageNames = (ArrayList<String>)request.getAttribute("fileNames");
-    for (int i =0; i < imageNames.size(); i++) {
-        String fileName = imageNames.get(i);
+    int lastId = Integer.parseInt((String)request.getAttribute("lastId"));
+    //int lastId = Integer.parseInt((String)request.getAttribute("lastId"));
+    out.println("lastId is" + lastId);
+    for (int i =0; i <= lastId; i++) {
+        String id = Integer.toString(i);
         out.println("<div>");
-        out.println("<img src=\"/download?name=" + fileName + "\"/>");
-        out.println("<a href=\"/download?name=" + fileName + "\"> [full version] </a>");
-        out.println("<a href=\"/download?name=" + fileName + "&attach=true\"> [download] </a>");
+        out.println("<img src=\"/download?id=" + Integer.toString(i) + "\"/>");
+        out.println("<a href=\"/download?id=" + id + "\"> [full version] </a>");
+        out.println("<a href=\"/download?id=" + id + "&attach=true\"> [download] </a>");
         out.println("</div>");
     }
 %>

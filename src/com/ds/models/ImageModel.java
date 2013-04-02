@@ -5,6 +5,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -15,8 +18,8 @@ public class ImageModel {
     int lastId;
 
     private ImageModel(String path) {
-        lastId = getLastId();
         this.path = path;
+        lastId = initLastId();
     }
 
 
@@ -27,8 +30,7 @@ public class ImageModel {
         return instance;
     }
 
-    private int getLastId() {
-        if (path != null) {
+    private int initLastId() {
             ArrayList<Integer> arrId = new ArrayList<Integer>();
 
             File file = new File(path);
@@ -38,18 +40,27 @@ public class ImageModel {
             for (int i = 0; i < files.length; i++)
                 arrId.add(Integer.parseInt(files[i].getName()));
             return Collections.max(arrId);
-        }
-        return 0;
     }
 
-    public String uploadFile(OutputStream out) throws IOException {
+    public void uploadFile(InputStream inp) throws IOException {
         String fileName = getNextFileName();
         File file = new File(path + fileName);
+        OutputStream out = new FileOutputStream(new File(path + fileName));
 
-        // send file
+        int read = 0;
+        final byte[] bytes = new byte[1024];
 
+        // upload the file
+        while ((read = inp.read(bytes)) != -1) {
+            out.write(bytes, 0, read);
+        }
 
-        return null;
+        if (out != null) {
+            out.close();
+        }
+        if (inp != null) {
+            inp.close();
+        }
     }
 
     public void downloadFile(String fileId, OutputStream out) throws IOException {
@@ -70,14 +81,13 @@ public class ImageModel {
 
     public boolean validId(String fileId) {
         int id = Integer.parseInt(fileId);
-        if (id > 0 && id <= lastId) {
+        if (id >= 0 && id <= lastId) {
             return true;
         }
         return false;
     }
 
-    public String getFullName(String fileId) {
-        File file = new File(path + fileId);
+    public String getFullName(String fileId) throws IOException {
         String mimeType = getMimeType(fileId);
         String ext = ".ext";
         if (mimeType.equals("image/jpeg")) {
@@ -92,9 +102,11 @@ public class ImageModel {
         return fileId + "." + ext;
     }
 
-    public String getMimeType(String fileId) {
-        File file = new File(path + fileId);
-        return  new MimetypesFileTypeMap().getContentType(file);
+    public String getMimeType(String fileId) throws IOException {
+        URL u = new URL("file:" + path + fileId);
+        URLConnection uc = u.openConnection();
+        String type = uc.getContentType();
+        return  type;
     }
 
     private String getNextFileName() {
@@ -102,7 +114,12 @@ public class ImageModel {
         return  Integer.toString(lastId);
     }
 
+    //todo
     private void checkMimeType() {
 
+    }
+
+    public int getLastId() {
+        return lastId;
     }
 }
