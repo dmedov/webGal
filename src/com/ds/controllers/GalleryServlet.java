@@ -15,11 +15,6 @@ import java.util.ArrayList;
 public class GalleryServlet extends HttpServlet {
     private int lastId;
     private ImageModel imageModel;
-    private String s;
-
-    public GalleryServlet() throws ServletException {
-
-    }
 
     protected  void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         doGet(request, response);
@@ -38,8 +33,7 @@ public class GalleryServlet extends HttpServlet {
     }
 
     private void goToView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        s = Integer.toString(lastId);
-        request.setAttribute("lastId", s);
+        request.setAttribute("lastId", String.valueOf(lastId));
         RequestDispatcher rd = getServletContext()
                 .getRequestDispatcher("/gallery.jsp");
         rd.forward(request, response);

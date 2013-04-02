@@ -16,8 +16,6 @@ ${resultMessage}
 <%
     // show images with links
     int lastId = Integer.parseInt((String)request.getAttribute("lastId"));
-    //int lastId = Integer.parseInt((String)request.getAttribute("lastId"));
-    out.println("lastId is" + lastId);
     for (int i =0; i <= lastId; i++) {
         String id = Integer.toString(i);
         out.println("<div>");
