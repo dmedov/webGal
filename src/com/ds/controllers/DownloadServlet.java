@@ -1,5 +1,7 @@
-package com.ds.den;
+package com.ds.controllers;
 
+
+import com.ds.models.ImageModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +13,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class DownloadServlet extends HttpServlet  {
+    private ImageModel imageModel;
+
+    DownloadServlet() throws ServletException {
+        // get upload path param from web.xml
+        String uploadPath =  this.getServletContext().getInitParameter("uploadPath");
+        if (uploadPath == null) {
+            throw new ServletException("'uploadPath' is not configured.");
+        }
+        // prepare model
+        imageModel = ImageModel.getInstance();
+        ImageModel.setPath(uploadPath);
+    }
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -24,21 +38,8 @@ public class DownloadServlet extends HttpServlet  {
             response.setHeader("Content-disposition","attachment; filename=" + fileName);
         }
 
-        String uploadPath =  this.getServletContext().getInitParameter("uploadPath");
-        if (uploadPath == null) {
-            throw new ServletException("'uploadPath' is not configured.");
-        }
-        File file = new File(uploadPath + fileName);
-
-        // send file
         OutputStream out = response.getOutputStream();
-        FileInputStream in = new FileInputStream(file);
-        byte[] buffer = new byte[4096];
-        int length;
-        while ((length = in.read(buffer)) > 0){
-            out.write(buffer, 0, length);
-        }
-        in.close();
+        imageModel.uploadFile(out);
         out.flush();
 
     }
