@@ -36,6 +36,10 @@ public class ImageModel {
             File file = new File(path);
             File[] files = file.listFiles();
 
+            if (files.length == 0) {
+                return -1;
+            }
+
             // add all id in array
             for (int i = 0; i < files.length; i++)
                 arrId.add(Integer.parseInt(files[i].getName()));
